@@ -23,14 +23,20 @@ export default function (config) {
       }
     }
 
-    onSelect = (url, path) => {
-      this.props.value = null
-      const { multiple, onSelect } = this.props
+    onSelect = (url) => {
+	  if(url.length == 0) return;
+
+	  this.props.value = null
+
+	  let attr = url.shift(), path = attr.url;
+	  const { multiple, onSelect } = this.props
       const media = {
-        url: url,
+        url: path,
         type: this.getMediaType(path)
       }
-      if (multiple) { this.state.media.push(media) }
+	  
+      if (multiple) { this.state.media.push(media); this.onSelect(url); }
+	  
       onSelect(multiple ? this.state.media : media)
     }
 
