@@ -17,7 +17,7 @@ export default function init (target, options = {}) {
   data.dispatch('core/editor').disablePublishSidebar()
 
   // Disable tips
-  data.dispatch('core/nux').disableTips()
+  //data.dispatch('core/nux').disableTips()
 
   window._wpLoadGutenbergEditor = new Promise(function (resolve) {
     domReady(async () => {

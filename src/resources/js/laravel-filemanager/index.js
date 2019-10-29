@@ -8,6 +8,7 @@ export default function (config) {
       this.state = {
         media: []
       }
+      props.addToGallery = true
     }
 
     getMediaType = (path) => {
@@ -26,7 +27,7 @@ export default function (config) {
     onSelect = (url) => {
 	  if(url.length == 0) return;
 
-	  this.props.value = null
+      this.props.value = null
 
 	  let attr = url.shift(), path = attr.url;
 	  const { multiple, onSelect } = this.props
@@ -34,9 +35,9 @@ export default function (config) {
         url: path,
         type: this.getMediaType(path)
       }
-	  
+
       if (multiple) { this.state.media.push(media); this.onSelect(url); }
-	  
+
       onSelect(multiple ? this.state.media : media)
     }
 

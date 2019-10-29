@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
+var exec = require('child_process').exec
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
 
 const externals = {
   react: 'React',
@@ -23,8 +23,20 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              {
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                  '@babel/plugin-proposal-class-properties'
+                ]
+              }
+            ]
+          },
+        },
       },
       {
         test: /\.(s*)css$/,
@@ -41,11 +53,17 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({ filename: '../css/laraberg.css' }),
-    new CopyPlugin([
-      { from: path.resolve(__dirname, 'public/js') + '/' + "laraberg.js", to: path.resolve(__dirname, '../../../public/vendor/laraberg/js') + '/' + "laraberg.js" },
-      { from: path.resolve(__dirname, 'public/js') + '/' + "laraberg.js.map", to: path.resolve(__dirname, '../../../public/vendor/laraberg/js') + '/' + "laraberg.js.map" },
-      { from: path.resolve(__dirname, 'public/css') + '/' + "laraberg.css", to: path.resolve(__dirname, '../../../public/vendor/laraberg/css') + '/' + "laraberg.css" },
-      { from: path.resolve(__dirname, 'public/css') + '/' + "laraberg.css.map", to: path.resolve(__dirname, '../../../public/vendor/laraberg/css') + '/' + "laraberg.css.map" },
-    ])
+    {
+        apply: (compiler) => {
+            compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+                const from = 'public', to = process.env.PWD + '/../../../public/vendor/laraberg'
+                console.log("copying ", from, "=>", to);
+                exec('cp -r \"' + from + '\" \"' + to + "\"", (err, stdout, stderr) => {
+                    if (stdout) process.stdout.write(stdout);
+                    if (stderr) process.stderr.write(stderr);
+                });
+            });
+        }
+    }
   ]
 }

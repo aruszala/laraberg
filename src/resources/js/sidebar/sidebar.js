@@ -52,16 +52,16 @@ class Sidebar extends Component {
 
     switch (element.type) {
       case 'text':
-        this.inputs.push(<TextInput key={index} element={element} />)
+        this.inputs.push( <TextInput key={index} element={element} /> )
         break
       case 'textarea':
-        this.inputs.push(<TextareaInput key={index} element={element} />)
+        this.inputs.push( <TextareaInput key={index} element={element} /> )
         break
       case 'select-one':
-        this.inputs.push(<SelectInput key={index} element={element} />)
+        this.inputs.push( <SelectInput key={index} element={element} /> )
         break
       case 'checkbox':
-        this.inputs.push(<CheckboxInput key={index} element={element} />)
+        this.inputs.push( <CheckboxInput key={index} element={element} /> )
         break
       case 'radio':
         this.radioCache.push(element)
@@ -88,7 +88,7 @@ class Sidebar extends Component {
       this.radioCache = []
     }
   }
-  
+
   render () {
     return (
       <PluginSidebar name="laraberg-sidebar" icon="media-text" title="Laraberg">
