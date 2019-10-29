@@ -58,7 +58,7 @@ module.exports = {
             compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
                 const from = 'public', to = process.env.PWD + '/../../../public/vendor/laraberg'
                 console.log("copying ", from, "=>", to);
-                exec('cp -r \"' + from + '\" \"' + to + "\"", (err, stdout, stderr) => {
+                exec('cp -rf \"' + from + '\" \"' + to + "\"", (err, stdout, stderr) => {
                     if (stdout) process.stdout.write(stdout);
                     if (stderr) process.stderr.write(stderr);
                 });
