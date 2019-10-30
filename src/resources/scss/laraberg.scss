@@ -29,6 +29,13 @@
     outline: none;
   }
 
+  .is-fullscreen-mode & {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      z-index: 100;
+  }
+
   .components-notice-list {
     position: sticky;
     top: 0;
@@ -171,4 +178,8 @@
 
 .laraberg-sidebar {
   display: none;
+}
+
+.edit-post-fullscreen-mode-close__toolbar {
+    display: none;
 }
