@@ -56,9 +56,8 @@ module.exports = {
     {
         apply: (compiler) => {
             compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-                const from = 'public', to = process.env.PWD + '/../../../public/vendor/laraberg'
-                console.log("copying ", from, "=>", to);
-                exec('cp -rf \"' + from + '\" \"' + to + "\"", (err, stdout, stderr) => {
+                const appPath = path.normalize(process.env.PWD + '/../../../')
+                exec('cd \"' + appPath+ "\" && php artisan vendor:publish --tag=laraberg-assets --force", (err, stdout, stderr) => {
                     if (stdout) process.stdout.write(stdout);
                     if (stderr) process.stderr.write(stderr);
                 });
