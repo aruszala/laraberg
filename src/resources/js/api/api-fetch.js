@@ -63,6 +63,11 @@ const requests = {
     regex: /\/wp\/v2\/media/g,
     run: optionsMedia
   },
+  editMedia: {
+    method: 'GET',
+    regex: /\/wp\/v2\/media\/(.*)/g,
+    run: editMedia
+  },
   getPage: {
     method: 'GET',
     regex: /\/wp\/v2\/pages\/(\d*)($|[?].*)/g,
@@ -227,6 +232,16 @@ async function postMedia () {
     description: {}
   }
 }
+
+/**
+ * Handle edit media requests
+ */
+async function editMedia (id) {
+    // Notices.error('testing')
+    // We need to return those values to prevent additional error messages
+    return MockData.media
+  }
+
 
 /**
  * Get media mockdata

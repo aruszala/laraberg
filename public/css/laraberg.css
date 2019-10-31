@@ -13007,6 +13007,9 @@ body.block-editor-page {
   display: -webkit-box;
   display: flex; }
 
+.components-range-control .components-range-control__slider {
+  width: auto !important; }
+
 .laraberg__editor {
   width: auto;
   overflow: hidden;
@@ -13021,6 +13024,11 @@ body.block-editor-page {
   right: 0; }
   .laraberg__editor *:focus {
     outline: none; }
+  .is-fullscreen-mode .laraberg__editor {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100; }
   .laraberg__editor .components-notice-list {
     position: -webkit-sticky;
     position: sticky;
@@ -13134,6 +13142,9 @@ body.block-editor-page {
   padding-top: 50%; }
 
 .laraberg-sidebar {
+  display: none; }
+
+.edit-post-fullscreen-mode-close__toolbar {
   display: none; }
 
 

@@ -4,11 +4,13 @@ export default function (config) {
 
   class LaravelFilemanager extends Component {
     constructor (props) {
+        props.gallery = true;
+        props.multiple = true;
+        props.addToGallery = true;
       super(props)
       this.state = {
         media: []
       }
-      props.addToGallery = true
     }
 
     getMediaType = (path) => {
@@ -25,20 +27,28 @@ export default function (config) {
     }
 
     onSelect = (url) => {
+
 	  if(url.length == 0) return;
 
-      this.props.value = null
+      this.props.value = []
 
 	  let attr = url.shift(), path = attr.url;
-	  const { multiple, onSelect } = this.props
+
+      const { multiple, onSelect } = this.props
+
       const media = {
+        id: this.state.media.length,
+        caption: "",
         url: path,
         type: this.getMediaType(path)
       }
 
-      if (multiple) { this.state.media.push(media); this.onSelect(url); }
+      this.state.media.push(media);
+      this.props.value.push(this.props.value.length);
 
-      onSelect(multiple ? this.state.media : media)
+      if (multiple) { this.onSelect(url); }
+
+      onSelect(multiple ? this.state.media : this.state.media[0])
     }
 
     openModal = () => {
@@ -67,3 +77,49 @@ export default function (config) {
     () => LaravelFilemanager
   )
 }
+
+/**
+ * Registers a new block menu button
+ *
+ *
+
+( function( wp ) {
+    var withSelect = wp.data.withSelect;
+    var ifCondition = wp.compose.ifCondition;
+    var compose = wp.compose.compose;
+    var MyCustomButton = function( props ) {
+        return wp.element.createElement(
+            wp.blockEditor.RichTextToolbarButton, {
+                icon: 'editor-code',
+                title: 'Sample output',
+                onClick: function() {
+                    console.log( 'toggle format' );
+                },
+            }
+        );
+    }
+    var ConditionalButton = compose(
+        withSelect( function( select ) {
+            return {
+                selectedBlock: select( 'core/editor' ).getSelectedBlock()
+            }
+        } ),
+        ifCondition( function( props ) {
+            if(props.selectedBlock) console.log(props.selectedBlock.name);
+            return (
+                props.selectedBlock &&
+                props.selectedBlock.name === 'core/gallery'
+            );
+        } )
+    )( MyCustomButton );
+
+    wp.richText.registerFormatType(
+        'my-custom-format/sample-output', {
+            title: 'Sample output',
+            tagName: 'samp',
+            className: null,
+            edit: ConditionalButton,
+        }
+    );
+} )( window.wp );
+*/

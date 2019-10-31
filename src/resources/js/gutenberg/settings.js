@@ -40,7 +40,7 @@ export const editorSettings = {
   allowedBlockTypes: true,
   disableCustomColors: false,
   disablePostFormats: false,
-  mediaLibrary: false,
+  mediaLibrary: true,
   titlePlaceholder: 'Add title',
   bodyPlaceholder: 'Write your story',
   isRTL: false,
