@@ -28,27 +28,23 @@ export default function (config) {
 
     onSelect = (url) => {
 
-	  if(url.length == 0) return;
-
-      this.props.value = []
-
-	  let attr = url.shift(), path = attr.url;
-
       const { multiple, onSelect } = this.props
 
-      const media = {
-        id: this.state.media.length,
-        caption: "",
-        url: path,
-        type: this.getMediaType(path)
+      this.state.media = []
+
+      for(let i = 0, len = url.length; i < len; i++){
+        this.state.media.push({
+          id: i,
+          caption: "",
+          url: url[i].url,
+          type: this.getMediaType(url[i].url)
+        });
       }
-
-      this.state.media.push(media);
-      this.props.value.push(this.props.value.length);
-
-      if (multiple) { this.onSelect(url); }
-
-      onSelect(multiple ? this.state.media : this.state.media[0])
+      if(this.state.media.length > 0) {
+        onSelect(multiple ? this.state.media : this.state.media[0])
+      } else {
+        onSelect([]);
+      }
     }
 
     openModal = () => {
