@@ -16,9 +16,11 @@ return [
 
     'prefix' => 'laraberg',
 
+    'media_manager' => 'unisharp/laravel-filemanager',
+
     "models" => [
         "block" => Block::class,
         "content" => Content::class,
     ],
-    
+
 ];

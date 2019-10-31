@@ -223,14 +223,14 @@ async function getEmbed (options, matches) {
 /**
  * Handle unsupported media upload request
  */
-async function postMedia () {
-  Notices.error('Drag & drop file uploads are not supported yet.')
+async function postMedia (request) {
+  const response = await axios.post(`${routePrefix}/media`, request.body, {
+    headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+  })
   // We need to return those values to prevent additional error messages
-  return {
-    caption: {},
-    title: {},
-    description: {}
-  }
+  return response.data
 }
 
 /**
