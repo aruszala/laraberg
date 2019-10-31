@@ -5305,154 +5305,6 @@ body.admin-color-light .block-editor-block-list__insertion-point-indicator{
   display: inline-block;
   margin-top: 0.6rem; }
 
-.block-editor-link-control__search {
-  position: relative;
-  min-width: 360px; }
-
-.block-editor-link-control__search .block-editor-link-control__search-input.block-editor-link-control__search-input > input[type="text"] {
-  width: calc(100% - 32px);
-  display: block;
-  padding: 11px 16px;
-  margin: 16px;
-  padding-right: 38px;
-  position: relative;
-  z-index: 1;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  /* Fonts smaller than 16px causes mobile safari to zoom. */
-  font-size: 16px; }
-  @media (min-width: 600px) {
-    .block-editor-link-control__search .block-editor-link-control__search-input.block-editor-link-control__search-input > input[type="text"] {
-      font-size: 13px; } }
-  .block-editor-link-control__search .block-editor-link-control__search-input.block-editor-link-control__search-input > input[type="text"]:focus {
-    color: #191e23;
-    border-color: #007cba;
-    box-shadow: 0 0 0 1px #007cba;
-    outline: 2px solid transparent; }
-
-.block-editor-link-control__search-reset {
-  position: absolute;
-  top: 19px;
-  right: 19px;
-  z-index: 10; }
-
-.block-editor-link-control__search-results-wrapper {
-  position: relative;
-  margin-top: -15px; }
-  .block-editor-link-control__search-results-wrapper::before, .block-editor-link-control__search-results-wrapper::after {
-    content: "";
-    position: absolute;
-    left: -1px;
-    right: 16px;
-    display: block;
-    pointer-events: none;
-    z-index: 100; }
-  .block-editor-link-control__search-results-wrapper::before {
-    height: 8px;
-    top: -1px;
-    bottom: auto;
-    background: linear-gradient(to bottom, white 0%, rgba(255, 255, 255, 0) 100%); }
-  .block-editor-link-control__search-results-wrapper::after {
-    height: 20px;
-    bottom: -1px;
-    top: auto;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%); }
-
-.block-editor-link-control__search-results {
-  margin: 0;
-  padding: 8px 16px;
-  max-height: 200px;
-  overflow-y: scroll; }
-  .block-editor-link-control__search-results.is-loading {
-    opacity: 0.2; }
-
-.block-editor-link-control__search-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  cursor: pointer;
-  background: #fff;
-  width: 100%;
-  border: none;
-  text-align: left;
-  padding: 10px 15px;
-  border-radius: 5px; }
-  .block-editor-link-control__search-item:hover, .block-editor-link-control__search-item:focus {
-    background-color: #e9e9e9; }
-  .block-editor-link-control__search-item.is-selected {
-    background: #f2f2f2; }
-    .block-editor-link-control__search-item.is-selected .block-editor-link-control__search-item-type {
-      background: #fff; }
-  .block-editor-link-control__search-item.is-current {
-    background: transparent;
-    border: 0;
-    width: 100%;
-    cursor: default;
-    padding: 16px;
-    padding-left: 24px; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-header {
-    display: block;
-    margin-right: 24px; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-icon {
-    margin-right: 1em;
-    min-width: 24px; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-info,
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-title {
-    text-overflow: ellipsis;
-    max-width: 230px;
-    overflow: hidden;
-    white-space: nowrap; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-title {
-    display: block;
-    margin-bottom: 0.2em;
-    font-weight: 500; }
-    .block-editor-link-control__search-item .block-editor-link-control__search-item-title mark {
-      font-weight: 700;
-      color: #000;
-      background-color: transparent; }
-    .block-editor-link-control__search-item .block-editor-link-control__search-item-title span {
-      font-weight: normal; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-info {
-    display: block;
-    color: #999;
-    font-size: 0.9em;
-    line-height: 1.3; }
-  .block-editor-link-control__search-item .block-editor-link-control__search-item-type {
-    display: block;
-    padding: 3px 8px;
-    margin-left: auto;
-    font-size: 0.9em;
-    background-color: #f3f4f5;
-    border-radius: 2px; }
-
-.block-editor-link-control__search-results div[role="menu"] > .block-editor-link-control__search-item.block-editor-link-control__search-item {
-  padding: 10px; }
-
-.block-editor-link-control__settings {
-  border-top: 1px solid #e1e1e1;
-  margin: 0;
-  padding: 16px 24px; }
-  .block-editor-link-control__settings :last-child {
-    margin-bottom: 0; }
-
-.block-editor-link-control .block-editor-link-control__search-input .components-spinner {
-  display: block;
-  z-index: 100;
-  float: none; }
-  .block-editor-link-control .block-editor-link-control__search-input .components-spinner.components-spinner {
-    position: absolute;
-    top: 70px;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    margin: 0 auto 16px auto;
-    transform: translateX(-50%); }
-
-.block-editor-link-control__search-item-action {
-  margin-left: auto;
-  flex-shrink: 0; }
-
 .block-editor-inner-blocks.has-overlay::after {
   content: "";
   position: absolute;
@@ -13146,6 +12998,9 @@ body.block-editor-page {
 
 .edit-post-fullscreen-mode-close__toolbar {
   display: none; }
+
+.components-form-file-upload .components-button.is-large {
+  padding-left: 12px; }
 
 
 /*# sourceMappingURL=laraberg.css.map*/
