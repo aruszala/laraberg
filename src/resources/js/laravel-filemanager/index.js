@@ -9,7 +9,7 @@ export default function (config) {
         props.addToGallery = true;
       super(props)
       this.state = {
-        media: []
+        media: props.value != undefined && Array.isArray(props.value) ? props.value.map((url) => { return {url: url}; }) : []
       }
     }
 
@@ -34,7 +34,7 @@ export default function (config) {
 
       for(let i = 0, len = url.length; i < len; i++){
         this.state.media.push({
-          id: i,
+          id: url[i].url,
           caption: "",
           url: url[i].url,
           type: this.getMediaType(url[i].url)
@@ -73,49 +73,3 @@ export default function (config) {
     () => LaravelFilemanager
   )
 }
-
-/**
- * Registers a new block menu button
- *
- *
-
-( function( wp ) {
-    var withSelect = wp.data.withSelect;
-    var ifCondition = wp.compose.ifCondition;
-    var compose = wp.compose.compose;
-    var MyCustomButton = function( props ) {
-        return wp.element.createElement(
-            wp.blockEditor.RichTextToolbarButton, {
-                icon: 'editor-code',
-                title: 'Sample output',
-                onClick: function() {
-                    console.log( 'toggle format' );
-                },
-            }
-        );
-    }
-    var ConditionalButton = compose(
-        withSelect( function( select ) {
-            return {
-                selectedBlock: select( 'core/editor' ).getSelectedBlock()
-            }
-        } ),
-        ifCondition( function( props ) {
-            if(props.selectedBlock) console.log(props.selectedBlock.name);
-            return (
-                props.selectedBlock &&
-                props.selectedBlock.name === 'core/gallery'
-            );
-        } )
-    )( MyCustomButton );
-
-    wp.richText.registerFormatType(
-        'my-custom-format/sample-output', {
-            title: 'Sample output',
-            tagName: 'samp',
-            className: null,
-            edit: ConditionalButton,
-        }
-    );
-} )( window.wp );
-*/
