@@ -57,7 +57,7 @@ export default function (config) {
 
     openLFM = (type, cb) => {
       let routePrefix = (config && config.prefix) ? config.prefix : '/laravel-filemanager'
-      window.open(routePrefix + '?type=' + type, 'FileManager', 'width=900,height=600')
+      window.open(routePrefix + '?type=' + type + "&selected=" + JSON.stringify(this.state.media.map( i => i.url )), 'FileManager', 'width=900,height=600')
       window.SetUrl = cb
     }
 
