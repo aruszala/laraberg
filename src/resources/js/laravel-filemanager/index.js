@@ -4,13 +4,9 @@ export default function (config) {
 
   class LaravelFilemanager extends Component {
     constructor (props) {
-        props.gallery = true;
-        props.multiple = true;
-        props.addToGallery = true;
       super(props)
-      this.state = {
-        media: props.value != undefined && Array.isArray(props.value) ? props.value.map((url) => { return {url: url}; }) : []
-      }
+      this.props = props;
+      this.state = {media: []};
     }
 
     getMediaType = (path) => {
@@ -57,6 +53,12 @@ export default function (config) {
 
     openLFM = (type, cb) => {
       let routePrefix = (config && config.prefix) ? config.prefix : '/laravel-filemanager'
+      this.state = {
+        media: (this.props.value != undefined ? (
+            Array.isArray(this.props.value) ? this.props.value.map((url) => { return {url: url}; }) : [{url: this.props.value}])
+            : []
+        )
+      }
       window.open(routePrefix + '?type=' + type + "&selected=" + JSON.stringify(this.state.media.map( i => i.url )), 'FileManager', 'width=900,height=600')
       window.SetUrl = cb
     }
