@@ -2,6 +2,7 @@ import { editorSettings, overridePost } from './settings'
 import { configureAPI } from '../api/api-fetch'
 import configureEditor from '../lib/configure-editor'
 import { elementReady } from '../lib/element-ready'
+import axios from 'axios'
 
 const { blocks, data, domReady, editPost } = window.wp
 const { unregisterBlockType, registerBlockType, getBlockType } = blocks
@@ -25,6 +26,7 @@ export default function init (target, options = {}) {
       try {
         resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
         fixReusableBlocks()
+        getTranslations()
       } catch (error) {
         console.error(error)
       }
@@ -62,4 +64,10 @@ function fixReusableBlocks () {
     }
   }
   registerBlockType('core/block', coreBlock)
+}
+
+function getTranslations () {
+    axios.get("/laraberg/translations").then((response) => {
+
+    });
 }

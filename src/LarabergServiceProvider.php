@@ -11,7 +11,7 @@ class LarabergServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(\Request $request)
     {
         if (config('laraberg.use_package_routes')) {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');

@@ -16,7 +16,7 @@ return [
 
     'prefix' => 'laraberg',
 
-    'media_manager' => 'unisharp/laravel-filemanager',
+    'locale' => 'tr_TR',
 
     "models" => [
         "block" => Block::class,
