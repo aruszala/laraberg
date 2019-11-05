@@ -2,8 +2,7 @@
 import { editorSettings } from '../gutenberg/settings'
 import { elementRendered } from './element-ready'
 import registerSidebar from '../sidebar/sidebar'
-import setupLaravelFilemanager from '../laravel-filemanager'
-import setupMockFilemanager from '../mock-file-uploader'
+import fileManagerFactory from "./file-managers";
 import setupActions from './actions'
 
 const { data } = window.wp
@@ -99,16 +98,7 @@ function setHeight (height) {
  */
 function setupMedia (options) {
   removeUploadButton()
-  if (options.laravelFilemanager) {
-    setupLaravelFilemanager(options.laravelFilemanager)
-  } else {
-    setupMockFilemanager()
-    data.dispatch('core/blocks').removeBlockTypes([
-      'core/cover',
-      'core/gallery',
-      'core/media-text'
-    ])
-  }
+  fileManagerFactory(options.fileManager, options.fileManagerSettings);
 }
 
 function setupSidebar (options) {
