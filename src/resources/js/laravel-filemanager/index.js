@@ -44,10 +44,7 @@ export default function (config) {
     }
 
     openModal = () => {
-      let type = 'file'
-      if (this.props.allowedTypes.length === 1 && this.props.allowedTypes[0] === 'image') {
-        type = 'image'
-      }
+      let type = this.props.allowedTypes.join(',')
       this.openLFM(type, this.onSelect)
     }
 
