@@ -4,7 +4,7 @@ import configureEditor from '../lib/configure-editor'
 import { elementReady } from '../lib/element-ready'
 import axios from 'axios'
 
-const { blocks, data, domReady, editPost } = window.wp
+const { blocks, data, domReady, editPost, i18n } = window.wp
 const { unregisterBlockType, registerBlockType, getBlockType } = blocks
 
 /**
@@ -24,9 +24,10 @@ export default function init (target, options = {}) {
     domReady(async () => {
       const larabergEditor = createEditorElement(target)
       try {
-        resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
-        fixReusableBlocks()
-        getTranslations()
+        getTranslations().then(()=>{
+            resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
+            fixReusableBlocks()
+        });
       } catch (error) {
         console.error(error)
       }
@@ -67,7 +68,10 @@ function fixReusableBlocks () {
 }
 
 function getTranslations () {
-    axios.get("/laraberg/translations").then((response) => {
-
+    return axios.get("/laraberg/i18n").then((response) => {
+        if(typeof response.data.jed !== "undefined"){
+            let domain = response.data.jed.domain;
+            window.wp.i18n.setLocaleData(response.data.jed.locale_data[domain], "default");
+        }
     });
 }

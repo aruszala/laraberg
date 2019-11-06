@@ -6,5 +6,5 @@
     });
 
     Route::group(['middleware' => config('laraberg.middlewares')], function () {
-        Route::get('laraberg/translations', 'VanOns\Laraberg\Http\Controllers\ApplicationController@getTranslations');
+        Route::get('laraberg/i18n', 'VanOns\Laraberg\Http\Controllers\ApplicationController@getTranslations');
     });
