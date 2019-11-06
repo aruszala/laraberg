@@ -27,6 +27,9 @@ class ApplicationController extends BaseController
     public function getTranslations()
     {
         $locale = config("laraberg.locale", null);
+
+        if($locale == null) return $this->ok();
+
         $poFileName = "$locale.po";
         $jedFileName = "$locale.jed";
         $poFilePath = dirname(__FILE__)."/../../resources/lang/$poFileName";
@@ -52,7 +55,9 @@ class ApplicationController extends BaseController
                             if($poFileContents) {
                                 file_put_contents($poFilePath, $poFileContents);
                             }
+                            $zip->close();
                         }
+                        unlink(storage_path(basename($currentLocaleData->package)));
                     }
                 }
             }
