@@ -11,13 +11,11 @@ class GetTextHelper
      * @param String $potFile
      * @return String $jedContents
      */
-    public static function convertPOTtoJED($locale, $potFile, $jedFile) {
+    public static function convertPOTtoJED($locale, $potFile) {
         $instance = (new self);
         $contents = $instance->readPOTFile($potFile);
         if($contents) {
-            $jed = $instance->buildJED($locale, $contents);
-            file_put_contents($jedFile, $jed);
-            return true;
+            return $instance->buildJED($locale, $contents);
         }
         return false;
     }
@@ -96,10 +94,21 @@ class GetTextHelper
 
     }
 
+    /**
+     * Gets content from a single POT line with a specific header type
+     * @param String $str
+     * @param String $type
+     * @return String
+     */
     private function getSingleLineStr($str, $type) {
         return preg_replace("/^\s*" . $type . "\s*\"(.+)\"\s*$/", "$1", $str, 1);
     }
 
+    /**
+     * Gets content from an indexed POT line like msgstr[0], msgstr[n]
+     * @param String str
+     * @return Array
+     */
     private function getIndexedLineStr($str)
     {
         $matches = [];
@@ -107,6 +116,12 @@ class GetTextHelper
         return ["index" => $matches[1], "text" => $matches[2]];
     }
 
+    /**
+     * Reads multiline string starting from POT file pointer
+     * @param FilePtr $fp
+     * @param Boolean $concatenate
+     * @return String|Array
+     */
     private function getMultilineStr($fp, $concatenate = true) {
         $terminators = ["msgstr \"\"", ""];
         $str = [];
@@ -123,6 +138,12 @@ class GetTextHelper
         }
     }
 
+    /**
+     * Builds JED file from parsed POT file array structure
+     * @param String $locale
+     * @param Array $potArray
+     * @return String $json
+     */
     private function buildJED($locale, $potArray)
     {
         $header = $this->parseHeader($potArray["header"]["translation"]);
@@ -131,18 +152,19 @@ class GetTextHelper
 
         $jed->{"translation-revision-date"} = $header["PO-Revision-Date"];
         $jed->generator = $header["X-Generator"];
-        $jed->domain = "messages";
+        $jed->domain = "default";
         $jed->locale_data = new StdClass();
-        $jed->locale_data->messages = new StdClass();
-        $jed->locale_data->messages->{""} = new StdClass();
-        $jed->locale_data->messages->{""}->domain = "messages";
-        $jed->locale_data->messages->{""}->{"plural-forms"} = $header["Plural-Forms"];
-        $jed->locale_data->messages->{""}->lang = $locale;
+        $jed->locale_data->default = new StdClass();
+        $jed->locale_data->default->{""} = new StdClass();
+        $jed->locale_data->default->{""}->domain = "default";
+        $jed->locale_data->default->{""}->{"plural-forms"} = $header["Plural-Forms"];
+        $jed->locale_data->default->{""}->lang = $locale;
 
         foreach($potArray["translations"] as $translation)
         {
             $context = $translation["context"] ?? false;
             $key = $translation["source"];
+            $previous = $translation["previous"] ?? false;
             $plural_key = $translation["source_plural"] ?? false;
             $translations = $translation["translation"];
 
@@ -151,20 +173,31 @@ class GetTextHelper
             if($context){
                 $contextSeparator = json_decode('"\u0004"');
                 $key = $context . $contextSeparator . $key;
+                if($previous){
+                    $previous = $context . $contextSeparator . $previous;
+                }
                 if($plural_key){
                     $plural_key = $context . $contextSeparator . $plural_key;
                 }
             }
 
-            $jed->locale_data->messages->{$key} = is_array($translations) ? $translations : [$translations];
+            $jed->locale_data->default->{$key} = is_array($translations) ? $translations : [$translations];
             if($plural_key) {
-                $jed->locale_data->messages->{$plural_key} = is_array($translations) ? $translations : [$translations];
+                $jed->locale_data->default->{$plural_key} = is_array($translations) ? $translations : [$translations];
+            }
+            if($previous) {
+                $jed->locale_data->default->{$previous} = is_array($translations) ? $translations : [$translations];
             }
         }
 
-        return json_encode($jed);
+        return $jed;
     }
 
+    /**
+     * Parses POT file header array
+     * @param Array $header
+     * @return Array $headers
+     */
     private function parseHeader($header)
     {
         $headers = [];
@@ -177,6 +210,28 @@ class GetTextHelper
             }
         }
         return $headers;
+    }
+
+    /**
+     * Merges second Jed object onto first one
+     * @param Object $jed1
+     * @param Object $jed2
+     * @return Object $jed1
+     */
+    public static function mergeJeds($jed1, $jed2)
+    {
+        //die(print_r($jed1));
+        $destination_domain = $jed1->domain;
+        $source_domain = $jed2->domain;
+        $source_contents = $jed2->locale_data->{$source_domain};
+        $source_keys = array_filter(array_keys(get_object_vars($source_contents)));
+        foreach($source_keys as $key)
+        {
+            if(trim($key) !== ""){
+                $jed1->locale_data->{$destination_domain}->{$key} = $source_contents->{$key};
+            }
+        }
+        return $jed1;
     }
 
 

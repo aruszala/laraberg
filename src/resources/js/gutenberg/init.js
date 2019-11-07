@@ -70,8 +70,11 @@ function fixReusableBlocks () {
 function getTranslations () {
     return axios.get("/laraberg/i18n").then((response) => {
         if(typeof response.data.jed !== "undefined"){
-            let domain = response.data.jed.domain;
-            window.wp.i18n.setLocaleData(response.data.jed.locale_data[domain], "default");
+            ( function( domain, translations ) {
+                var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+                localeData[""].domain = domain;
+                wp.i18n.setLocaleData( localeData, domain );
+            } )( response.data.jed.domain, response.data.jed );
         }
     });
 }

@@ -3,7 +3,6 @@
 namespace VanOns\Laraberg\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Storage as Storage;
 use VanOns\Laraberg\Helpers\GetTextHelper;
 use ZipArchive;
 
@@ -30,13 +29,13 @@ class ApplicationController extends BaseController
 
         if($locale == null) return $this->ok();
 
-        $poFileName = "$locale.po";
         $jedFileName = "$locale.jed";
-        $poFilePath = dirname(__FILE__)."/../../resources/lang/$poFileName";
-        $jedFilePath = dirname(__FILE__)."/../../resources/lang/$jedFileName";
+        $zippath = storage_path($locale).DIRECTORY_SEPARATOR;
+        $jedFilePath = $this->normalizePath(dirname(__FILE__).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ["..","..","resources","lang","vendor","laraberg",$jedFileName]));
+
         if ( $locale && \Str::startsWith($locale, "en_") == false ) {
             // check if translation exists
-            if(file_exists($poFilePath) == false) {
+            if(file_exists($zippath) == false) {
                 // try to fetch the language packages
                 $languages = json_decode(file_get_contents("http://api.wordpress.org/translations/core/1.0/"));
 
@@ -51,10 +50,7 @@ class ApplicationController extends BaseController
                         file_put_contents(storage_path(basename($currentLocaleData->package)), $zipContents);
                         $zip = new ZipArchive();
                         if($zip->open(storage_path(basename($currentLocaleData->package)))) {
-                            $poFileContents = $zip->getFromName($poFileName);
-                            if($poFileContents) {
-                                file_put_contents($poFilePath, $poFileContents);
-                            }
+                            $zip->extractTo($zippath);
                             $zip->close();
                         }
                         unlink(storage_path(basename($currentLocaleData->package)));
@@ -62,15 +58,50 @@ class ApplicationController extends BaseController
                 }
             }
 
-            if(file_exists($poFilePath) == true) {
+            if(file_exists($zippath) == true && is_dir($zippath)) {
                 try {
                     if(file_exists($jedFilePath) == false){
-                        if(GetTextHelper::convertPOTtoJED($locale, $poFilePath, $jedFilePath)){
-                            throw new \Exception("POT File conversion failed!");
-                        }
-                    }
+                        $jedContents = null;
 
-                    $jedContents = json_decode(file_get_contents($jedFilePath));
+                        /**
+                         * Merge PO files
+                         */
+                        $files = scandir($zippath);
+                        $poFilePaths = array_filter($files, function($file){ return pathinfo($file, PATHINFO_EXTENSION) == "po"; });
+                        foreach($poFilePaths as $poFilePath){
+                            $converted = GetTextHelper::convertPOTtoJED($locale, $zippath . $poFilePath, $jedFilePath);
+                            if($converted == false){
+                                throw new \Exception("POT File conversion failed!");
+                            }
+                            if(!$jedContents){
+                                $jedContents = $converted;
+                            }else{
+                                $jedContents = GetTextHelper::mergeJeds($jedContents, $converted);
+                            }
+                        }
+
+                        /**
+                         * Merge Jed Files
+                         */
+                        $jsons = array_filter($files, function($file){ return pathinfo($file, PATHINFO_EXTENSION) == "json"; });
+                        foreach($jsons as $json)
+                        {
+                            $contents = json_decode(file_get_contents($zippath . $json));
+                            if($contents){
+                                $jedContents = GetTextHelper::mergeJeds($jedContents, $contents);
+                            }
+                        }
+
+                        /**
+                         * Save Jed object to file
+                         */
+                        if(!is_dir(dirname($jedFilePath))) mkdir(dirname($jedFilePath), 0777, true);
+                        file_put_contents($jedFilePath, json_encode($jedContents));
+                        \Storage::deleteDirectory($zippath);
+
+                    } else {
+                        $jedContents = json_decode(file_get_contents($jedFilePath));
+                    }
 
                     if($jedContents){
                         return $this->response(["message" => "ok", "jed" => $jedContents], 200);
@@ -82,5 +113,18 @@ class ApplicationController extends BaseController
             }
         }
         return $this->ok();
+    }
+
+    private function normalizePath($path){
+        $route = explode(DIRECTORY_SEPARATOR, $path);
+        $newPath = [];
+        foreach($route as $waypoint){
+            if($waypoint == ".."){
+                array_pop($newPath);
+            }else{
+                array_push($newPath, $waypoint);
+            }
+        }
+        return implode(DIRECTORY_SEPARATOR, $newPath);
     }
 }
