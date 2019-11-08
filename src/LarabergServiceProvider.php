@@ -19,6 +19,9 @@ class LarabergServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
+        $this->loadTranslationsFrom( __DIR__ . '/resources/lang', 'laraberg' );
+
+        $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang/vendor/laraberg')], 'laraberg-i18n');
         $this->publishes([__DIR__ . '/../public' => public_path('vendor/laraberg')], 'laraberg-assets');
         $this->publishes([__DIR__ . '/config/laraberg.php' => config_path('laraberg.php')], 'laraberg-config');
     }

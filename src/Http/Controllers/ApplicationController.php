@@ -100,10 +100,38 @@ class ApplicationController extends BaseController
                         \Storage::deleteDirectory($zippath);
 
                     } else {
+
+                        /**
+                         * Read the previously saved file
+                         */
                         $jedContents = json_decode(file_get_contents($jedFilePath));
                     }
 
-                    if($jedContents){
+                    if($jedContents) {
+
+                        /**
+                         * Append override translations from laravel language files
+                         */
+
+                        $translations = trans("laraberg::".$locale);
+
+                        // Populate Jed with the overrides
+                        if(is_array($translations))
+                        {
+                            $domain = $jedContents->domain;
+                            foreach($translations as $key => $value){
+                                if(!is_array($value)) {
+                                    $jedContents->locale_data->{$domain}->{$key} = [$value];
+                                } else {
+                                    $jedContents->locale_data->{$domain}->{$key} = $value;
+                                }
+                            }
+                        }
+
+
+                        /**
+                         * Send Jed object to frontend
+                         */
                         return $this->response(["message" => "ok", "jed" => $jedContents], 200);
                     }
                 }

@@ -6,7 +6,6 @@ import './gutenberg/imports'
 import init from './gutenberg/init'
 import { getContent, setContent } from './lib/content'
 import { registerBlock, registerCategory } from './lib/custom-blocks'
-import axios from "axios";
 
 const Laraberg = {
   init: init,

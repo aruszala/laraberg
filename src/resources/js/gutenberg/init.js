@@ -12,29 +12,27 @@ const { unregisterBlockType, registerBlockType, getBlockType } = blocks
  * @param {string} target the element ID to render the gutenberg editor in
  */
 export default function init (target, options = {}) {
-  configureAPI(options)
+    getTranslations();
+    configureAPI(options)
+    // Disable publish sidebar
+    data.dispatch('core/editor').disablePublishSidebar()
 
-  // Disable publish sidebar
-  data.dispatch('core/editor').disablePublishSidebar()
+    // Disable tips
+    data.dispatch('core/nux').disableTips()
 
-  // Disable tips
-  data.dispatch('core/nux').disableTips()
-
-  window._wpLoadGutenbergEditor = new Promise(function (resolve) {
-    domReady(async () => {
-      const larabergEditor = createEditorElement(target)
-      try {
-        getTranslations().then(()=>{
+    window._wpLoadGutenbergEditor = new Promise(function (resolve) {
+        domReady(async () => {
+        const larabergEditor = createEditorElement(target)
+        try {
             resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
             fixReusableBlocks()
-        });
-      } catch (error) {
-        console.error(error)
-      }
-      await elementReady('.edit-post-layout')
-      configureEditor(options)
+        } catch (error) {
+            console.error(error)
+        }
+        await elementReady('.edit-post-layout')
+        configureEditor(options)
+        })
     })
-  })
 }
 
 /**
