@@ -12,25 +12,25 @@ const { unregisterBlockType, registerBlockType, getBlockType } = blocks
  * @param {string} target the element ID to render the gutenberg editor in
  */
 export default function init (target, options = {}) {
-    getTranslations();
-    configureAPI(options)
-    // Disable publish sidebar
-    data.dispatch('core/editor').disablePublishSidebar()
 
-    // Disable tips
-    data.dispatch('core/nux').disableTips()
-
-    window._wpLoadGutenbergEditor = new Promise(function (resolve) {
-        domReady(async () => {
-        const larabergEditor = createEditorElement(target)
-        try {
-            resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
-            fixReusableBlocks()
-        } catch (error) {
-            console.error(error)
-        }
-        await elementReady('.edit-post-layout')
-        configureEditor(options)
+    getTranslations(options).then(()=>{
+        configureAPI(options)
+        // Disable publish sidebar
+        data.dispatch('core/editor').disablePublishSidebar()
+        // Disable tips
+        data.dispatch('core/nux').disableTips()
+        window._wpLoadGutenbergEditor = new Promise(function (resolve) {
+            domReady(async () => {
+                const larabergEditor = createEditorElement(target)
+                try {
+                    resolve(editPost.initializeEditor(larabergEditor.id, 'page', 1, editorSettings, overridePost))
+                    fixReusableBlocks()
+                } catch (error) {
+                    console.error(error)
+                }
+                await elementReady('.edit-post-layout')
+                configureEditor(options)
+            })
         })
     })
 }
@@ -56,6 +56,7 @@ function createEditorElement (target) {
 
 function fixReusableBlocks () {
   const coreBlock = getBlockType('core/block')
+  console.log(coreBlock)
   unregisterBlockType('core/block')
   coreBlock.attributes = {
     ref: {
@@ -65,13 +66,14 @@ function fixReusableBlocks () {
   registerBlockType('core/block', coreBlock)
 }
 
-function getTranslations () {
-    return axios.get("/laraberg/i18n").then((response) => {
+function getTranslations (options) {
+    var routePrefix = options.prefix || '/laraberg'
+    return axios.get(routePrefix + "/i18n").then((response) => {
         if(typeof response.data.jed !== "undefined"){
             ( function( domain, translations ) {
                 var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
                 localeData[""].domain = domain;
-                wp.i18n.setLocaleData( localeData, domain );
+                i18n.setLocaleData( localeData, domain );
             } )( response.data.jed.domain, response.data.jed );
         }
     });

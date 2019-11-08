@@ -5,7 +5,7 @@ import registerSidebar from '../sidebar/sidebar'
 import fileManagerFactory from "./file-managers";
 import setupActions from './actions'
 
-const { data } = window.wp
+const { data, i18n, blocks } = window.wp
 
 /**
  * Configures the editor according to the provided options object
@@ -17,6 +17,7 @@ export default function configureEditor (options) {
   setupSidebar(options)
   setupSubmit(editorSettings.target)
   disableWPBlocks()
+  translateWPBlocks()
   removeElements()
   if (options.maxHeight) { setMaxHeight(options.maxHeight) }
   if (options.minHeight) { setMinHeight(options.minHeight) }
@@ -54,6 +55,16 @@ function disableWPBlocks () {
     'core/search',
     'core/tag-cloud'
   ])
+}
+
+
+/// Works but not as desired..
+
+function translateWPBlocks () {
+    blocks.getBlockTypes().forEach(element => {
+        element.title = i18n.__(element.title)
+        element.description = i18n.__(element.description)
+    })
 }
 
 /**
