@@ -56,7 +56,6 @@ function createEditorElement (target) {
 
 function fixReusableBlocks () {
   const coreBlock = getBlockType('core/block')
-  console.log(coreBlock)
   unregisterBlockType('core/block')
   coreBlock.attributes = {
     ref: {
