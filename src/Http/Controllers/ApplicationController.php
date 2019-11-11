@@ -27,41 +27,50 @@ class ApplicationController extends BaseController
     {
         $locale = config("laraberg.locale", null);
 
-        if($locale == null) return $this->ok();
+        if(!$locale) return $this->ok();
 
         $jedFileName = "$locale.jed";
+        $jedContents = null;
+
         $zippath = storage_path($locale).DIRECTORY_SEPARATOR;
-        $jedFilePath = $this->normalizePath(dirname(__FILE__).DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ["..","..","resources","lang","vendor","laraberg",$jedFileName]));
+        $jedFilePath = $this->normalizePath(
+            dirname(__FILE__) .
+            DIRECTORY_SEPARATOR .
+            implode( DIRECTORY_SEPARATOR, ["..","..","resources","lang","vendor","laraberg", $jedFileName] )
+        );
 
-        if ( $locale && \Str::startsWith($locale, "en_") == false ) {
+        if ( \Str::startsWith($locale, "en_") == false ) {
+
             // check if translation exists
-            if(file_exists($zippath) == false) {
-                // try to fetch the language packages
-                $languages = json_decode(file_get_contents("http://api.wordpress.org/translations/core/1.0/"));
+            if(file_exists($jedFilePath) == false) {
 
-                if($languages) {
-                    $localeData = array_values(array_filter($languages->translations, function($translation) use ($locale){
-                        return $translation->language == $locale;
-                    }));
+                // check if zip files are already downloaded
+                if(file_exists($zippath) == false) {
 
-                    if(count($localeData) > 0) {
-                        $currentLocaleData = $localeData[0];
-                        $zipContents = file_get_contents($currentLocaleData->package);
-                        file_put_contents(storage_path(basename($currentLocaleData->package)), $zipContents);
-                        $zip = new ZipArchive();
-                        if($zip->open(storage_path(basename($currentLocaleData->package)))) {
-                            $zip->extractTo($zippath);
-                            $zip->close();
+                    // try to fetch the language packages
+                    $languages = json_decode(file_get_contents("http://api.wordpress.org/translations/core/1.0/"));
+
+                    if($languages) {
+                        $localeData = array_values(array_filter($languages->translations, function($translation) use ($locale){
+                            return $translation->language == $locale;
+                        }));
+
+                        if(count($localeData) > 0) {
+                            $currentLocaleData = $localeData[0];
+                            $zipContents = file_get_contents($currentLocaleData->package);
+                            file_put_contents(storage_path(basename($currentLocaleData->package)), $zipContents);
+                            $zip = new ZipArchive();
+                            if($zip->open(storage_path(basename($currentLocaleData->package)))) {
+                                $zip->extractTo($zippath);
+                                $zip->close();
+                            }
+                            unlink(storage_path(basename($currentLocaleData->package)));
                         }
-                        unlink(storage_path(basename($currentLocaleData->package)));
                     }
                 }
-            }
 
-            if(file_exists($zippath) == true && is_dir($zippath)) {
-                try {
-                    if(file_exists($jedFilePath) == false){
-                        $jedContents = null;
+                if(file_exists($zippath) == true && is_dir($zippath)) {
+                    try {
 
                         /**
                          * Merge PO files
@@ -99,47 +108,48 @@ class ApplicationController extends BaseController
                         file_put_contents($jedFilePath, json_encode($jedContents));
                         \Storage::deleteDirectory($zippath);
 
-                    } else {
-
-                        /**
-                         * Read the previously saved file
-                         */
-                        $jedContents = json_decode(file_get_contents($jedFilePath));
                     }
-
-                    if($jedContents) {
-
-                        /**
-                         * Append override translations from laravel language files
-                         */
-
-                        $translations = trans("laraberg::".$locale);
-
-                        // Populate Jed with the overrides
-                        if(is_array($translations))
-                        {
-                            $domain = $jedContents->domain;
-                            foreach($translations as $key => $value){
-                                if(!is_array($value)) {
-                                    $jedContents->locale_data->{$domain}->{$key} = [$value];
-                                } else {
-                                    $jedContents->locale_data->{$domain}->{$key} = $value;
-                                }
-                            }
-                        }
-
-
-                        /**
-                         * Send Jed object to frontend
-                         */
-                        return $this->response(["message" => "ok", "jed" => $jedContents], 200);
+                    catch(\Exception $ex) {
+                        return $this->response(["message" => $ex->getMessage(), "trace" => $ex->getTrace()], 401);
                     }
-                }
-                catch(\Exception $ex) {
-                    return $this->response(["message" => $ex->getMessage(), "trace" => $ex->getTrace()], 401);
                 }
             }
+        } else {
+
+            /**
+             * Read the previously saved file
+             */
+            $jedContents = json_decode(file_get_contents($jedFilePath));
         }
+
+        if($jedContents) {
+
+            /**
+             * Append override translations from laravel language files
+             */
+
+            $translations = trans("laraberg::".$locale);
+
+            // Populate Jed with the overrides
+            if(is_array($translations))
+            {
+                $domain = $jedContents->domain;
+                foreach($translations as $key => $value){
+                    if(!is_array($value)) {
+                        $jedContents->locale_data->{$domain}->{$key} = [$value];
+                    } else {
+                        $jedContents->locale_data->{$domain}->{$key} = $value;
+                    }
+                }
+            }
+
+
+            /**
+             * Send Jed object to frontend
+             */
+            return $this->response(["message" => "ok", "jed" => $jedContents], 200);
+        }
+
         return $this->ok();
     }
 
