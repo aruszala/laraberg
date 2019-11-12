@@ -106,6 +106,23 @@ class ApplicationController extends BaseController
                          */
                         if(!is_dir(dirname($jedFilePath))) mkdir(dirname($jedFilePath), 0777, true);
                         file_put_contents($jedFilePath, json_encode($jedContents));
+
+                        /**
+                         * Save Jed object as PHP language file
+                         */
+                        $jedContentsPHP = "<?php return [";
+                        foreach($jedContents->locale_data->default as $key => $value){
+                            if(is_array($value)){
+                                $jedContentsPHP .= "\"". addslashes($key) . "\" => \"" . addslashes($value[0]) . "\",\n";
+                            }
+                        }
+                        $jedContentsPHP .= "];";
+
+                        file_put_contents($this->normalizePath(
+                            dirname(__FILE__) .
+                            DIRECTORY_SEPARATOR .
+                            implode(DIRECTORY_SEPARATOR, ["..", "..", "..", "resources", "lang", "_" . explode("_", $locale)[0] .".php"])
+                        ), $jedContentsPHP);
                         \Storage::deleteDirectory($zippath);
 
                     }
