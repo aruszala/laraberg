@@ -113,13 +113,14 @@ class ApplicationController extends BaseController
                         return $this->response(["message" => $ex->getMessage(), "trace" => $ex->getTrace()], 401);
                     }
                 }
-            }
-        } else {
 
-            /**
-             * Read the previously saved file
-             */
-            $jedContents = json_decode(file_get_contents($jedFilePath));
+            } else {
+
+                /**
+                 * Read the previously saved file
+                 */
+                $jedContents = json_decode(file_get_contents($jedFilePath));
+            }
         }
 
         if($jedContents) {
@@ -142,7 +143,6 @@ class ApplicationController extends BaseController
                     }
                 }
             }
-
 
             /**
              * Send Jed object to frontend
