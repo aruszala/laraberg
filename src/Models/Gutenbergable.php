@@ -1,10 +1,10 @@
 <?php
 
-namespace VanOns\Laraberg\Models;
+namespace aruszala\Laraberg\Models;
 
-use VanOns\Laraberg\Models\Content;
-use VanOns\Laraberg\Events\ContentCreated;
-use VanOns\Laraberg\Events\ContentUpdated;
+use aruszala\Laraberg\Models\Content;
+use aruszala\Laraberg\Events\ContentCreated;
+use aruszala\Laraberg\Events\ContentUpdated;
 
 trait Gutenbergable
 {
