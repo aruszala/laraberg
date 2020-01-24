@@ -1,10 +1,10 @@
 <?php
 
-namespace VanOns\Laraberg\Events;
+namespace aruszala\Laraberg\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-use VanOns\Laraberg\Models\Content;
+use aruszala\Laraberg\Models\Content;
 
 class ContentCreated
 {
