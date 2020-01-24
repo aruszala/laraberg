@@ -1,10 +1,10 @@
 <?php
 
-namespace VanOns\Laraberg\Events;
+namespace aruszala\Laraberg\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-use VanOns\Laraberg\Models\Content;
+use aruszala\Laraberg\Models\Content;
 
 class ContentUpdated
 {
@@ -15,7 +15,7 @@ class ContentUpdated
     /**
      * Create a new event instance
      * 
-     * @param VanOns\Laraberg\Models\Content $content
+     * @param aruszala\Laraberg\Models\Content $content
      * @return void
      */
     public function __construct(Content $content)
