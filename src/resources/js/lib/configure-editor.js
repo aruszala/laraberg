@@ -2,11 +2,10 @@
 import { editorSettings } from '../gutenberg/settings'
 import { elementRendered } from './element-ready'
 import registerSidebar from '../sidebar/sidebar'
-import setupLaravelFilemanager from '../laravel-filemanager'
-import setupMockFilemanager from '../mock-file-uploader'
+import fileManagerFactory from "./file-managers";
 import setupActions from './actions'
 
-const { data } = window.wp
+const { data, i18n, blocks } = window.wp
 
 /**
  * Configures the editor according to the provided options object
@@ -18,6 +17,7 @@ export default function configureEditor (options) {
   setupSidebar(options)
   setupSubmit(editorSettings.target)
   disableWPBlocks()
+  translateWPBlocks()
   removeElements()
   if (options.maxHeight) { setMaxHeight(options.maxHeight) }
   if (options.minHeight) { setMinHeight(options.minHeight) }
@@ -55,6 +55,16 @@ function disableWPBlocks () {
     'core/search',
     'core/tag-cloud'
   ])
+}
+
+
+/// Works but not as desired..
+
+function translateWPBlocks () {
+    blocks.getBlockTypes().forEach(element => {
+        element.title = i18n.__(element.title)
+        element.description = i18n.__(element.description)
+    })
 }
 
 /**
@@ -99,16 +109,7 @@ function setHeight (height) {
  */
 function setupMedia (options) {
   removeUploadButton()
-  if (options.laravelFilemanager) {
-    setupLaravelFilemanager(options.laravelFilemanager)
-  } else {
-    setupMockFilemanager()
-    data.dispatch('core/blocks').removeBlockTypes([
-      'core/cover',
-      'core/gallery',
-      'core/media-text'
-    ])
-  }
+  fileManagerFactory(options.fileManager, options.fileManagerSettings);
 }
 
 function setupSidebar (options) {
@@ -138,7 +139,7 @@ function setupSubmit (target) {
  * Removes the default upload button from media blocks
  */
 function removeUploadButton () {
-  elementRendered('.components-form-file-upload button', element => element.remove())
+  elementRendered('.components-form-file-upload button.block-editor-media-placeholder__upload-button', element => element.remove())
 }
 
 /**

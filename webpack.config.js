@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+var exec = require('child_process').exec
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const externals = {
@@ -22,8 +23,20 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              {
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                  '@babel/plugin-proposal-class-properties'
+                ]
+              }
+            ]
+          },
+        },
       },
       {
         test: /\.(s*)css$/,
@@ -39,6 +52,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ filename: '../css/laraberg.css' })
+    new MiniCssExtractPlugin({ filename: '../css/laraberg.css' }),
+    {
+        apply: (compiler) => {
+            compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+                const appPath = path.normalize(process.env.PWD + '/../../../')
+                exec('cd \"' + appPath+ "\" && php artisan vendor:publish --tag=laraberg-assets --force", (err, stdout, stderr) => {
+                    if (stdout) process.stdout.write(stdout);
+                    if (stderr) process.stderr.write(stderr);
+                });
+            });
+        }
+    }
   ]
 }

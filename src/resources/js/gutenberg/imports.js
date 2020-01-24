@@ -72,7 +72,7 @@ const imports = {
   i18n,
   isShallowEqual,
   keycodes,
-  // listReusableBlocks,
+  //listReusableBlocks,
   mediaUtils,
   notices,
   nux,
@@ -88,9 +88,11 @@ const imports = {
   wordcount
 }
 
+
 window.wp = {
   ...(window.wp || {}),
   ...imports
 }
+
 
 export default imports

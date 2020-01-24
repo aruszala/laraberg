@@ -11,12 +11,19 @@ class LarabergServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(\Request $request)
     {
-        $this->publishes([__DIR__ . '/config/laraberg.php' => config_path('laraberg.php')], 'config');
-        require __DIR__ . '/Http/routes.php';
+        if (config('laraberg.use_package_routes')) {
+            $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        }
+
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        $this->publishes([__DIR__ . '/../public' => public_path('vendor/laraberg')], 'public');
+
+        $this->loadTranslationsFrom( __DIR__ . '/resources/lang', 'laraberg' );
+
+        $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang/vendor/laraberg')], 'laraberg-i18n');
+        $this->publishes([__DIR__ . '/../public' => public_path('vendor/laraberg')], 'laraberg-assets');
+        $this->publishes([__DIR__ . '/config/laraberg.php' => config_path('laraberg.php')], 'laraberg-config');
     }
     /**
      * Register the application services.
@@ -28,7 +35,7 @@ class LarabergServiceProvider extends ServiceProvider
         $this->app->singleton(Laraberg::class, function () {
             return new Laraberg();
         });
+
         $this->app->alias(Laraberg::class, 'laraberg');
     }
 }
-

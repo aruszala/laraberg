@@ -16,9 +16,11 @@ return [
 
     'prefix' => 'laraberg',
 
+    'locale' => 'tr_TR',
+
     "models" => [
         "block" => Block::class,
         "content" => Content::class,
     ],
-    
+
 ];
