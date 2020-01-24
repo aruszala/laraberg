@@ -1,12 +1,12 @@
 <?php
 
-namespace VanOns\Laraberg\Models;
+namespace aruszala\Laraberg\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use VanOns\Laraberg\Helpers\BlockHelper;
-use VanOns\Laraberg\Helpers\EmbedHelper;
-use VanOns\Laraberg\Helpers\SlugHelper;
+use aruszala\Laraberg\Helpers\BlockHelper;
+use aruszala\Laraberg\Helpers\EmbedHelper;
+use aruszala\Laraberg\Helpers\SlugHelper;
 
 class Block extends Model
 {
