@@ -1,9 +1,9 @@
 <?php
 
-namespace VanOns\Laraberg\Http\Controllers;
+namespace aruszala\Laraberg\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use VanOns\Laraberg\Helpers\GetTextHelper;
+use aruszala\Laraberg\Helpers\GetTextHelper;
 use ZipArchive;
 
 class ApplicationController extends BaseController
