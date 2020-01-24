@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\Laraberg;
+namespace aruszala\Laraberg;
 
 use Illuminate\Support\ServiceProvider;
 
