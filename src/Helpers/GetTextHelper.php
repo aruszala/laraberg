@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\Laraberg\Helpers;
+namespace aruszala\Laraberg\Helpers;
 
 use stdClass;
 
