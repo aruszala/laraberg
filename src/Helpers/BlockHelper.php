@@ -1,8 +1,8 @@
 <?php
 
-namespace VanOns\Laraberg\Helpers;
+namespace aruszala\Laraberg\Helpers;
 
-use VanOns\Laraberg\Models\Block;
+use aruszala\Laraberg\Models\Block;
 
 class BlockHelper
 {
