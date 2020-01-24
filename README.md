@@ -48,7 +48,7 @@ composer require van-ons/laraberg
 Add vendor files to your project (CSS, JS & Config):
 
 ```bash
-php artisan vendor:publish --provider="VanOns\Laraberg\LarabergServiceProvider"
+php artisan vendor:publish --provider="aruszala\Laraberg\LarabergServiceProvider"
 ```
 
 In order to store the data for the Gutenberg editor, Laraberg needs to run a database migration:
@@ -83,7 +83,7 @@ The Gutenberg editor expects React, ReactDOM, Moment and JQuery to be in the env
 
 When updating Laraberg you have to publish the vendor files again by running this command:
 ```bash
-php artisan vendor:publish --provider="VanOns\Laraberg\LarabergServiceProvider" --tag="public" --force
+php artisan vendor:publish --provider="aruszala\Laraberg\LarabergServiceProvider" --tag="public" --force
 ```
 
 # Usage
@@ -152,7 +152,7 @@ The `options` object can contain the following optional keys:
 In order to add the editor content to a model Laraberg provides the 'Gutenbergable' trait.
 
 ```php
-use VanOns\Laraberg\Models\Gutenbergable;
+use aruszala\Laraberg\Models\Gutenbergable;
 
 class MyModel extends Model {
   use Gutenbergable;
@@ -253,9 +253,9 @@ Laraberg.registerCategory(title, slug)
 
 Laraberg implements Laravel events that you can use to implement your own listeners. The events contain a 'content' attribute that contains the relevant Content object. For information on how Laravel events work you can read the [Laravel documentation](https://laravel.com/docs/5.8/events).
 
-- VanOns\Laraberg\Events\ContentCreated
-- VanOns\Laraberg\Events\ContentRendered
-- VanOns\Laraberg\Events\ContentUpdated
+- aruszala\Laraberg\Events\ContentCreated
+- aruszala\Laraberg\Events\ContentRendered
+- aruszala\Laraberg\Events\ContentUpdated
 
 ## Sidebar
 
@@ -356,8 +356,8 @@ If you wish to define the routes yourself you can do that by setting 'use_packag
 
 ```php
 Route::group(['prefix' => 'laraberg', 'middleware' => ['web', 'auth']], function() {
-  Route::apiResource('blocks', 'VanOns\Laraberg\Http\Controllers\BlockController');
-  Route::get('oembed', 'VanOns\Laraberg\Http\Controllers\OEmbedController');
+  Route::apiResource('blocks', 'aruszala\Laraberg\Http\Controllers\BlockController');
+  Route::get('oembed', 'aruszala\Laraberg\Http\Controllers\OEmbedController');
 });
 ```
 
