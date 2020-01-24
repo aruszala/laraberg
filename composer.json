@@ -17,17 +17,17 @@
     },
     "autoload": {
         "psr-4": {
-            "VanOns\\Laraberg\\": "src"
+            "aruszala\\Laraberg\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VanOns\\Laraberg\\Test\\": "tests"
+            "aruszala\\Laraberg\\Test\\": "tests"
         }
     },
     "extra": {
         "laravel": {
-            "providers": "VanOns\\Laraberg\\LarabergServiceProvider"
+            "providers": "aruszala\\Laraberg\\LarabergServiceProvider"
         }
     }
 
