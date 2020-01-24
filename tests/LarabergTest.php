@@ -1,9 +1,9 @@
 <?php
 
-namespace VanOns\Laraberg\Test;
+namespace aruszala\Laraberg\Test;
 
 use Laraberg;
-use VanOns\Laraberg\Test\TestCase;
+use aruszala\Laraberg\Test\TestCase;
 
 class LarabergTest extends TestCase
 {
