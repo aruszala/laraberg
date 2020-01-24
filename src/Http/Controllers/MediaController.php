@@ -1,4 +1,4 @@
-<?php namespace VanOns\Laraberg\Http\Controllers;
+<?php namespace aruszala\Laraberg\Http\Controllers;
 
 use Illuminate\Http\Request;
 
