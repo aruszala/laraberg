@@ -1,9 +1,9 @@
 <?php
 
-namespace VanOns\Laraberg\Http\Controllers;
+namespace aruszala\Laraberg\Http\Controllers;
 
 use Illuminate\Http\Request;
-use VanOns\Laraberg\Helpers\EmbedHelper;
+use aruszala\Laraberg\Helpers\EmbedHelper;
 
 class OEmbedController extends ApplicationController
 {
