@@ -1,7 +1,7 @@
 <?php
 
-use VanOns\Laraberg\Models\Block;
-use VanOns\Laraberg\Models\Content;
+use aruszala\Laraberg\Models\Block;
+use aruszala\Laraberg\Models\Content;
 
 return [
     /*
@@ -16,7 +16,7 @@ return [
 
     'prefix' => 'laraberg',
 
-    'locale' => 'tr_TR',
+    'locale' => 'en_US',
 
     "models" => [
         "block" => Block::class,
