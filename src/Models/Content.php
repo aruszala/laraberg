@@ -1,14 +1,14 @@
 <?php
 
-namespace VanOns\Laraberg\Models;
+namespace aruszala\Laraberg\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use mysql_xdevapi\Exception;
-use VanOns\Laraberg\Helpers\EmbedHelper;
-use VanOns\Laraberg\Helpers\BlockHelper;
-use VanOns\Laraberg\Events\ContentCreated;
-use VanOns\Laraberg\Events\ContentUpdated;
-use VanOns\Laraberg\Events\ContentRendered;
+use aruszala\Laraberg\Helpers\EmbedHelper;
+use aruszala\Laraberg\Helpers\BlockHelper;
+use aruszala\Laraberg\Events\ContentCreated;
+use aruszala\Laraberg\Events\ContentUpdated;
+use aruszala\Laraberg\Events\ContentRendered;
 
 class Content extends Model
 {
