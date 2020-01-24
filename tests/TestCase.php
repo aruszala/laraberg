@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\Laraberg\Test;
+namespace aruszala\Laraberg\Test;
 
 use aruszala\Laraberg\LarabergFacade;
 use aruszala\Laraberg\LarabergServiceProvider;
@@ -11,7 +11,7 @@ class TestCase extends OrchestraTestCase
     /**
      * Load package service provider
      * @param  \Illuminate\Foundation\Application $app
-     * @return VanOns\Laraberg\LarabergServiceProvider
+     * @return aruszala\Laraberg\LarabergServiceProvider
      */
     protected function getPackageProviders($app)
     {
