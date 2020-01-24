@@ -2,8 +2,8 @@
 
 namespace VanOns\Laraberg\Test;
 
-use VanOns\Laraberg\LarabergFacade;
-use VanOns\Laraberg\LarabergServiceProvider;
+use aruszala\Laraberg\LarabergFacade;
+use aruszala\Laraberg\LarabergServiceProvider;
 use Orchestra\Testbench\Testcase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
