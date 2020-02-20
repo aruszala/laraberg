@@ -24,24 +24,24 @@ export default function (config) {
 
     onSelect = (url) => {
 
-      const { multiple, onSelect } = this.props
+            const { multiple, onSelect } = this.props
 
-      this.state.media = []
+            this.state.media = []
 
-      for(let i = 0, len = url.length; i < len; i++){
-        this.state.media.push({
-          id: url[i].url,
-          caption: "",
-          url: url[i].url,
-          type: this.getMediaType(url[i].url)
-        });
-      }
-      if(this.state.media.length > 0) {
-        onSelect(multiple ? this.state.media : this.state.media[0])
-      } else {
-        onSelect([]);
-      }
-    }
+            for (let i = 0, len = url.length; i < len; i++) {
+                this.state.media.push({
+                    id: url[i].url,
+                    caption: '',
+                    url: url[i].url,
+                    type: this.getMediaType(url[i].url)
+                })
+            }
+            if (this.state.media.length > 0) {
+                onSelect(multiple ? this.state.media : this.state.media[0])
+            } else {
+                onSelect([])
+            }
+        }
 
     openModal = () => {
       let type = this.props.allowedTypes.join(',')
